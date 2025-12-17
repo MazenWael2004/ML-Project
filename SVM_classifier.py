@@ -1,13 +1,13 @@
 import joblib
-import numpy as NP
-from sklearn.svm import svc
+import numpy as np
+from sklearn.svm import SVC
 
 class SVMClassifier:
     def __init__(self, C=1.0, kernel="rbf", gamma="scale"):
         self.C = C
         self.kernel = kernel
         self.gamma = gamma
-        self.model = svc(
+        self.model = SVC(
             C=C,
             kernel=kernel,
             gamma=gamma,
@@ -21,7 +21,7 @@ class SVMClassifier:
         # Get decision function value
         decision_value = self.model.decision_function([x])[0]
         probas = self.model.predict_proba([x])[0]
-        max_proba = NP.max(probas)
+        max_proba = np.max(probas)
 
         # Unknown class threshold
         if max_proba < 0.6:
