@@ -5,11 +5,14 @@ To run the notebook (`project.ipynb`), you need to install the following Python 
 
 - `tqdm`
 - `opencv-python`
+- `torch`
+- `torchvision`
+- `Pillow`
 
 You can install them using pip:
 
 ```bash
-pip install tqdm opencv-python
+pip install tqdm opencv-python torch torchvision Pillow
 ```
 
 ## Project Structure
