@@ -93,7 +93,7 @@ if not cap.isOpened():
 
 print("Deployment started — press Q to quit")
 
-THRESHOLD = 0.2   # Unknown threshold
+THRESHOLD = 0.6  # Unknown threshold
 
 while True:
     ret, frame = cap.read()
@@ -136,3 +136,4 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
+
