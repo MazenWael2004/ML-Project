@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 from knn_classifier import KNNMaterialClassifier
 
 X_val = np.load("X_val.npy")
@@ -10,13 +10,16 @@ knn.load("knn_model.pkl")
 
 y_pred = np.array([knn.predict(x) for x in X_val])
 
-#  IGNORE UNKNOWN CLASS
+
+
+# Unknown analysis
+unknown_count = np.sum(y_pred == 6)
+unknown_ratio = unknown_count / len(y_pred)
+
+print("Unknown samples detected:", unknown_count)
+
 mask = y_pred != 6
+if np.any(mask):
+    filtered_acc = accuracy_score(y_val[mask], y_pred[mask])
+    print(" Accuracy :", filtered_acc)
 
-filtered_y_val = y_val[mask]
-filtered_y_pred = y_pred[mask]
-
-acc = accuracy_score(filtered_y_val, filtered_y_pred)
-
-print("Validation Accuracy (Primary Classes 0–5 only):", acc)
-print("Unknown samples detected:", np.sum(y_pred == 6))
