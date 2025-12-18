@@ -9,25 +9,19 @@ import joblib
 CATEGORIES = ['cardboard', 'plastic', 'glass', 'metal', 'paper', 'trash']
 
 
-def predict(dataPath, modelPath):
+def predict(dataFilePath, bestModelPath):
     device = torch.device("cpu")
 
-    # -------------------------------
-    # 1. CNN FEATURE EXTRACTOR
-    # -------------------------------
+   # CNN FEturee extractor
     cnn = models.resnet50(pretrained=True)
     cnn.fc = nn.Identity()  # remove classifier
     cnn.to(device)
     cnn.eval()
 
-    # -------------------------------
-    # 2. LOAD SVM / KNN MODEL
-    # -------------------------------
+   # Load the best model
     clf = joblib.load(modelPath)  # SVM or KNN
 
-    # -------------------------------
-    # 3. IMAGE TRANSFORMS
-    # -------------------------------
+    # imAgee trAnsformations
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
@@ -37,11 +31,9 @@ def predict(dataPath, modelPath):
         ),
     ])
 
-    results = []
+    pred = []
 
-    # -------------------------------
-    # 4. PREDICTION LOOP
-    # -------------------------------
+    
     for img_name in sorted(os.listdir(dataPath)):
         img_path = os.path.join(dataPath, img_name)
 
@@ -56,13 +48,13 @@ def predict(dataPath, modelPath):
             features = cnn(image)
             features = features.squeeze().cpu().numpy()
 
-        # Predict using SVM / KNN
+        # now we predict
         pred_idx = clf.predict([features])[0]
         category = CATEGORIES[pred_idx]
 
-        results.append((img_name, category))
+        pred.append((img_name, category))
 
-    return results
+    return pred
 if __name__ == "__main__":
     dataPath = "path/to/test/images"
     modelPath = "path/to/saved/model.pkl"
